@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import './App.css';
 
 import Todo from './components/Todo';
@@ -7,25 +7,8 @@ import Search from './components/Search';
 import Filter from './components/Filter';
 
 function App() {
-  const [todos, setTodos] = useState([
-    {
-      id: 1,
-      text: "criar funcionalidade x no sistema",
-      category: "Trabalho",
-      isCompleted: false,
-    },
-    {
-      id: 2,
-      text: "Ir pra academia",
-      category: "Pessoal",
-      isCompleted: false,
-    },
-    {
-      id: 3,
-      text: "Estudar React",
-      category: "Estudos",
-      isCompleted: false,
-    }])
+  const initialTodos = JSON.parse(localStorage.getItem("todos")) || [];
+  const [todos, setTodos] = useState(initialTodos);
 
   const [search, setSearch] = useState("")
   const [filter, setFilter] = useState("All")
@@ -56,6 +39,12 @@ function App() {
     newTodos.map((todo) => todo.id === id ? todo.isCompleted = !todo.isCompleted : todo)
     setTodos(newTodos)
   }
+
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }, [todos]);
+
+  
 
   return (<div className="app">
     <h1>Lista de tarefas</h1>
